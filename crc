@@ -1,0 +1,80 @@
+package daa;
+import java.util.*;
+class crcscanner1{
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of message bits :");
+		int m_bits=sc.nextInt();
+		 int message[]=new int[m_bits];
+		 System.out.println("Enter message bits :");
+		 for(int i=0;i<m_bits;i++)
+			 message[i]=sc.nextInt();
+		 System.out.println("Enter the number of gen bits :");
+			int g_bits=sc.nextInt();
+			 int gen[]=new int[g_bits];
+			 System.out.println("Enter Gen bits : ");
+			 for(int i=0;i<g_bits;i++)
+				 gen[i]=sc.nextInt();
+			 
+	    int total=m_bits+g_bits-1;
+	    int app[]=new int[total];
+	    int rem[]=new int[total];
+	    int trans[]=new int[total];
+	    
+	    for(int i=0;i<m_bits;i++)
+	    	app[i]=message[i];
+	    System.out.print("Message bits are :");
+	    for(int i=0;i<m_bits;i++)
+	    	System.out.print(message[i]);
+	    System.out.print("\n Generator bits are :");
+	    for(int i=0;i<g_bits;i++)
+	    	System.out.print(gen[i]);
+	    System.out.print("\n Appended message is :");
+	    for(int i=0;i<app.length;i++)
+	    	System.out.print(app[i]);
+	    for(int i=0;i<app.length;i++)
+	    	rem[i]=app[i];
+	    rem=computecrc(gen,rem);
+	    for(int i=0;i<app.length;i++)
+	    	trans[i]=(app[i]^rem[i]);
+	    System.out.print("\nTransmitted msg from transmitter is : ");
+	    for(int i=0;i<trans.length;i++)
+	    	System.out.print(trans[i]);
+	    System.out.println("\nEnter received msg of"+total+"bits : ");
+	    for(int i=0;i<trans.length;i++)
+	    	trans[i]=sc.nextInt();
+	    System.out.print("Received msg is : ");
+	    for(int i=0;i<trans.length;i++)
+	    	System.out.print(trans[i]);
+	    for(int i=0;i<trans.length;i++)
+	    	rem[i]=trans[i];
+	    rem=computecrc(gen,rem);
+	    for(int i=0;i<rem.length;i++)
+	    {
+	    	if(rem[i]!=0) {
+	    		System.out.println("\nError");
+	    	    break;
+	    	}
+	    	if(i==rem.length-1) {
+	    		System.out.println("\n No Error");
+	    	}
+	    }
+		sc.close();
+	}
+	    
+	    static int[] computecrc(int gen[], int rem[]) {
+	        int current=0;
+	        while(true) {
+	            for(int i=0;i<gen.length;i++)
+	                rem[current+i]=(rem[current+i]^gen[i]);
+	            while(rem[current]==0 && current!=rem.length-1)
+	                current++;
+	            if((rem.length-current)<gen.length)
+	                break;
+	        }
+	        return rem;
+	    }
+				 
+			 
+	}
